@@ -1,23 +1,28 @@
-function barcodes = computeBarcodes( xy, maxHomDim, doCocycles )
-% barcodes = computeBarcodes( xy, maxHomDim )
+function [barcodes, rips_complex] = computeBarcodes( xy, opts )
+% [barcodes, rips_complex] = computeBarcodes( xy )
 %
 % Compute barcodes using py.ripser.
+% [barcodes, rips_complex] = computeBarcodes( xy )
 %      xy is a N x D matrix of points (every row is a vector of points)
-%      maxHomDim - maximum homology dimension requested
-%      doCocycles - compute cocycles (default:false)
-%
 % Output:
 %      barcodes - cell array of Nx2 matrices each corresponding to a set of
 %                 barcodes for a different homology dimension
-% 
+%      rips_complex - raw Python object returned by ripser
+%
+% Optional arguments:
+% [barcodes, rips_complex] = computeBarcodes( xy, 'maxHomDim', N, ...)
+%      maximum homology dimension = N requested (default:2)
+% [barcodes, rips_complex] = computeBarcodes( xy, 'doCocycles',TF, ...)
+%      compute cocycles true/false (default:false)
+%
 % If no output is requested, the function plots all barcodes using
-% `plotBarcode` function.
+% `plotBarcode` and `plotPersistenceDiagram` functions.
 
 arguments
     
     xy (:,:) {mustBeFinite,mustBeReal}
-    maxHomDim (1,1) {mustBeNonnegative, mustBeFinite} = 2
-    doCocycles logical = false;
+    opts.maxHomDim (1,1) {mustBeNonnegative, mustBeFinite} = 2
+    opts.doCocycles logical = false;
     
 end
 
@@ -25,13 +30,12 @@ end
 %% call to Ripser and conversion of outputs
     % We call Ripser using python, giving it our cell data and getting out
     % the persistence diagrams.
-    args = pyargs('maxdim', maxHomDim, 'do_cocycles', doCocycles);
-    pD = py.ripser.ripser(xy, args );
-    DGMS = pD{'dgms'};
+    args = pyargs('maxdim', opts.maxHomDim, 'do_cocycles', opts.doCocycles);
+    rips_complex = py.ripser.ripser(xy, args );
     
     % These persistent diagrams are spit out in a python object, and need
     % to be converted into matrices by use of the double function
-    barcodes = cellfun( @double, cell(DGMS), 'UniformOutput',false );
+    barcodes = cellfun( @double, cell(rips_complex{'dgms'}), 'UniformOutput',false );
     
     %% plot if no arguments requested
     if nargout == 0
