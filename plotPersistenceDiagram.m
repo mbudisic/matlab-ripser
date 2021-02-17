@@ -1,6 +1,6 @@
-function h = plotBarcode( barcode )
-% PLOTBARCODE Plots a barcode.
-% h = plotBarcode( barcode )
+function h = plotPersistenceDiagram( barcode )
+% PLOTPERSISTENCEDIAGRAM Plots a barcode.
+% h = plotPersistenceDiagram( barcode )
 %
 % Input:
 %
@@ -28,13 +28,10 @@ isPersistent = isinf(barcode(:,2));
 % set the "inf" values to twice the max;
 barcode(isPersistent, 2) = 2*max( barcode(~isPersistent,2) );
 
-h = plot( barcode.', repmat(1:size(barcode,1), 2,1) );
 
+h1 = plot( barcode(~isPersistent,1), barcode(~isPersistent,2), '.', 'MarkerSize',10 ); hold all;
+h2 = plot( barcode(isPersistent,1), barcode(isPersistent,2), 'x', 'MarkerSize',8, 'Color',h1.Color );
+hold off;
 
-% set the color of the first to all
-[h.Color] = deal(h(1).Color);
-[h(isPersistent).Color] = deal('r');
-[h(isPersistent).LineWidth] = deal(2);
-
-
+h = [h1,h2];
 end
