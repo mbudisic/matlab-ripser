@@ -17,9 +17,10 @@ function h = plotPersistenceDiagram( barcode )
 % or to make them all thicker
 %   [h.LineWidth] = deal( 2 );
 
-if isempty(barcode)
-    warning("Barcode is empty. No plots created.")
-    return;
+arguments
+
+    barcode (:,:) {mustBeNonempty}
+    
 end
 
 % barcodes with infinite duration

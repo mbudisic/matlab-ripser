@@ -31,20 +31,40 @@ end
     
     % These persistent diagrams are spit out in a python object, and need
     % to be converted into matrices by use of the double function
-    for i = 1:maxHomDim+1
-        barcodes{i} = double(DGMS{i});
-    end
+    barcodes = cellfun( @double, cell(DGMS), 'UniformOutput',false );
     
     %% plot if no arguments requested
     if nargout == 0
-        colors = lines( numel(barcodes) );
+        h_bars = cell( numel(barcodes), 1);
+        h_pers = cell( numel(barcodes), 1);
         
+        colors = lines( numel(barcodes) );
+        figure;
         for k = 1:numel(barcodes)
-            h{k} = plotBarcode(barcodes{k}); hold on;
-            [h{k}.Color] = deal( ...
-                colors( k, : ) );
+            if ~isempty( barcodes{k} )
+                
+                % plot barcodes
+                subplot(1,2,1);
+                
+                h_bars{k} = plotBarcode(barcodes{k});
+                hold on;
+                [h_bars{k}.Color] = deal( ...
+                    colors( k, : ) );
+                
+                % plot persistence diagrams
+                subplot(1,2,2);
+                
+                h_pers{k} = plotPersistenceDiagram( barcodes{k} );
+                hold on;
+                [h_pers{k}.Color] = deal( ...
+                    colors( k, : ) );
+                
+                
+            end
+            
         end
-        hold off;
+        subplot(1,2,1); hold off;
+        subplot(1,2,2); hold off;
     end
         
 end
