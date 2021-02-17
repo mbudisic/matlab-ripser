@@ -3,12 +3,12 @@ Interface to RIPSER via MATLAB's python
 
 This package depends on
 
-(a) MATLAB having a working connection with a Python installation,
-(b) RIPSER being installed in the same Python.
+  - MATLAB having a working connection with a Python installation,
+  - RIPSER being installed in the same Python.
 
 For how to do that see
-    * https://www.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-for-python.html
-    * https://ripser.scikit-tda.org
+  - https://www.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-for-python.html
+  - https://ripser.scikit-tda.org
 
 To test that the package was installed correctly run:
 
