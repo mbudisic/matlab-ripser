@@ -14,13 +14,12 @@ function contourValues = computeCROCKER(X, scales, maxHomDim)
 %                  1-loops, etc.)
 %      
 % 
-% This function takes as input a matrix cellPaths (whose dimensions are
+% This function takes as input a matrix X (whose dimensions are
 % timeframes as rows, X and Y position as the two columns, and cell ID as
-% the "layers"), maxEps which is the maximum epsilon value for the creation
-% of the CROCKER matrix, stepEps which allows you to specify how many steps
-% are taken before reaching maxEps or in other words how many rows the
-% CROCKER matrix will include, and finally maxHomDim as a way to control
-% the maximum homology dimension used in the py.ripser.ripser call.
+% the "layers"), scales which will be used to specify the persistent scale
+% used in the creation of the CROCKER plot, and finally maxHomDim as a way 
+% to control the maximum homology dimension used in the py.ripser.ripser 
+% call.
 
 arguments
    
