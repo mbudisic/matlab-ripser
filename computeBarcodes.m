@@ -5,7 +5,8 @@ function [barcodes, rips_complex] = computeBarcodes( input, opts )
 % [barcodes, rips_complex] = computeBarcodes( input )
 %      input is EITHER a N x D matrix of points (every row is a vector of
 %                     points) - Vietoris-Rips complex will be computed using Euclidean distance
-%               OR a N x N pairwise distance matrix between points
+%               OR a N x N pairwise distance matrix between points (e.g.
+%                    computed using squareform(pdist( ... ) )
 % Output:
 %      barcodes - cell array of Kx2 matrices each corresponding to a set of
 %                 barcodes for a different homology dimension

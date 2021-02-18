@@ -1,11 +1,14 @@
-function contourValues = computeCROCKER(X, scales, maxHomDim)
+function [crockerValues, scales] = computeCROCKER(X, scales, maxHomDim)
 % COMPUTECROCKER Computes CROCKER plot contours.
 % function contourValues = computeCROCKER(paths, maxEps, stepEps, maxHomDim)
 %
 % Inputs:
 %
-%      paths - nTimes x nDims x nPaths matrix containing time traces for
-%              all paths
+%      input - EITHER nPoint x nDim x nFrame matrix containing time traces for
+%                     all paths (each input(:,:,k) is a single timeframe )
+%              OR     nPoint x nPoint x nFrame matrix containing pariwise
+%              distanes for all frames (each input(:,:,k) is a distance
+%              matrix for a single timeframe )
 %
 %      scales - list of epsilon values (spatial scales) for which to compute
 %              CROCKER (defines "vertical" axis for the CROCKER plot)
@@ -30,8 +33,8 @@ arguments
     
 end
 
-% store nubmer of frames, dimensions, particles
-[nT, nD, nP] = size(X);
+% store number of frames, dimensions, particles
+nT = size(X,3);
 
 % make sure the scale axis is sorted
 scales = sort(scales); 
@@ -41,16 +44,15 @@ scales = sort(scales);
 % columns - timeframes
 % layers - Betti # order (since MATLAB index must start at 1, the 0th Betti
 % number would be the 1st index)
-contourValues = nan(numel(scales), nT, maxHomDim+1);
+crockerValues = nan(numel(scales), nT, maxHomDim+1);
 
 for frame_idx = 1:nT
     % We freeze the matrix at a specific timeframe, which basically freezes
     % all the cells in place to allow us to compute the topological data
     % for that timeframe of the CROCKER matrix using the scale values
-    % defined above.
-    frame = transpose(squeeze(X(frame_idx, :, :)));
+    % defined above.    
+    barcodes = computeBarcodes( X(:,:,frame_idx), 'maxHomDim', maxHomDim );
     
-    barcodes = computeBarcodes( frame, maxHomDim );
     
     % Once this is done, the information we have are numbers which describe
     % the birth and death of components for the specific homology
@@ -64,7 +66,7 @@ for frame_idx = 1:nT
             % Here we select the specific barcode we are interested in
             % computing connections for, and then we sum based on criteria
             % given below...
-            contourValues(scale_idx,frame_idx,hom_idx) = ...
+            crockerValues(scale_idx,frame_idx,hom_idx) = ...
                 sum( (barcode(:,2) > scales(scale_idx) | isnan(barcode(:,2) ) ) & ... % barcodes that end after the current interval
                      barcode(:,1)<= scales(scale_idx+1) ); % barcodes that begin before the current interval
         end
