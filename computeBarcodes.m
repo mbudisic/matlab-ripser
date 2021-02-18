@@ -1,17 +1,19 @@
-function [barcodes, rips_complex] = computeBarcodes( xy, opts )
-% [barcodes, rips_complex] = computeBarcodes( xy )
+function [barcodes, rips_complex] = computeBarcodes( input, opts )
+% [barcodes, rips_complex] = computeBarcodes( input )
 %
 % Compute barcodes using py.ripser.
-% [barcodes, rips_complex] = computeBarcodes( xy )
-%      xy is a N x D matrix of points (every row is a vector of points)
+% [barcodes, rips_complex] = computeBarcodes( input )
+%      input is EITHER a N x D matrix of points (every row is a vector of
+%                     points) - Vietoris-Rips complex will be computed using Euclidean distance
+%               OR a N x N pairwise distance matrix between points
 % Output:
-%      barcodes - cell array of Nx2 matrices each corresponding to a set of
+%      barcodes - cell array of Kx2 matrices each corresponding to a set of
 %                 barcodes for a different homology dimension
 %      rips_complex - raw Python object returned by ripser
 %
 % Optional arguments:
-% [barcodes, rips_complex] = computeBarcodes( xy, 'maxHomDim', N, ...)
-%      maximum homology dimension = N requested (default:2)
+% [barcodes, rips_complex] = computeBarcodes( xy, 'maxHomDim', D, ...)
+%      maximum homology dimension = D requested (default:2)
 % [barcodes, rips_complex] = computeBarcodes( xy, 'doCocycles',TF, ...)
 %      compute cocycles true/false (default:false)
 %
@@ -20,7 +22,7 @@ function [barcodes, rips_complex] = computeBarcodes( xy, opts )
 
 arguments
     
-    xy (:,:) {mustBeFinite,mustBeReal}
+    input (:,:) {mustBeFinite,mustBeReal}
     opts.maxHomDim (1,1) {mustBeNonnegative, mustBeFinite} = 2
     opts.doCocycles logical = false;
     
@@ -31,7 +33,7 @@ end
     % We call Ripser using python, giving it our cell data and getting out
     % the persistence diagrams.
     args = pyargs('maxdim', opts.maxHomDim, 'do_cocycles', opts.doCocycles);
-    rips_complex = py.ripser.ripser(xy, args );
+    rips_complex = py.ripser.ripser(input, args );
     
     % These persistent diagrams are spit out in a python object, and need
     % to be converted into matrices by use of the double function
