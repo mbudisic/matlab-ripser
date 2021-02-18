@@ -1,6 +1,6 @@
-function [crockerValues, scales] = computeCROCKER(X, scales, maxHomDim)
+function [crockerValues, scales] = computeCROCKER(input, scales, maxHomDim)
 % COMPUTECROCKER Computes CROCKER plot contours.
-% function contourValues = computeCROCKER(paths, maxEps, stepEps, maxHomDim)
+% function [crockerValues, scales] = computeCROCKER(input, scales, maxHomDim)
 %
 % Inputs:
 %
@@ -27,14 +27,14 @@ function [crockerValues, scales] = computeCROCKER(X, scales, maxHomDim)
 
 arguments
    
-    X (:,:,:) {mustBeFinite}
+    input (:,:,:) {mustBeFinite}
     scales (1,:) {mustBeNonnegative,mustBeNonempty}
     maxHomDim {mustBeNonnegative} = 1;
     
 end
 
 % store number of frames, dimensions, particles
-nT = size(X,3);
+nT = size(input,3);
 
 % make sure the scale axis is sorted
 scales = sort(scales); 
@@ -51,7 +51,7 @@ for frame_idx = 1:nT
     % all the cells in place to allow us to compute the topological data
     % for that timeframe of the CROCKER matrix using the scale values
     % defined above.    
-    barcodes = computeBarcodes( X(:,:,frame_idx), 'maxHomDim', maxHomDim );
+    barcodes = computeBarcodes( input(:,:,frame_idx), 'maxHomDim', maxHomDim );
     
     
     % Once this is done, the information we have are numbers which describe
