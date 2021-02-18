@@ -4,7 +4,7 @@ Interface to RIPSER (computation of persistent homology) via MATLAB's python int
 This package depends on
 
   - MATLAB having a working connection with a Python installation,
-  - RIPSER being installed in the same Python.
+  - Ripser pip package being installed under the same Python environment.
 
 For how to do that see
   - https://www.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-for-python.html
