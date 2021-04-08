@@ -42,9 +42,9 @@ if strcmpi(opts.algtype, 'rips')
     % to be converted into matrices by use of the double function
     barcodes = cellfun( @double, cell(rips_complex{'dgms'}), 'UniformOutput',false );
 else
-    M = py.dionysus.fill_freudenthal(py.numpy.array( input ) )
-    P = py.dionysus.homology_persistence(M)
-    dgms = py.dionysus.init_diagrams(P,M)
+    M = py.dionysus.fill_freudenthal(py.numpy.array( input ) );
+    P = py.dionysus.homology_persistence(M);
+    dgms = py.dionysus.init_diagrams(P,M);
     
     barcodes = cell(dgms.length,1);
     for k = 1:dgms.length
@@ -58,7 +58,7 @@ else
 
 end
 
-barcodes{1}
+barcodes{1};
 
 %% plot if no arguments requested
 if nargout == 0
