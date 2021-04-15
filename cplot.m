@@ -6,32 +6,35 @@ function [] = cplot(fullB0,fullB1,startSnap,endSnap)
 % being fed as input when producing the "window" model.
 
 %% Error Checks
-if startSnap > endSnap
-    error('startSnap cannot be greater than endSnap')
-end
-
-cols = size(fullB0,2);
-if startSnap < 1
-    error('startSnap cannot be less than 1')
-end
+if nargin < 3
     
-if endSnap > cols
-    error('endSnap cannot be greater than the size of the CROCKER matrix')
+else
+    
+    if startSnap > endSnap
+        error('startSnap cannot be greater than endSnap')
+    end
+
+    cols = size(fullB0,2);
+    if startSnap < 1
+        error('startSnap cannot be less than 1')
+    end
+
+    if endSnap > cols
+        error('endSnap cannot be greater than the size of the CROCKER matrix')
+    end
+
 end
 
 %% Plotting
 % Full Plot - This is the full plot of B0 and B1. If only two arguments are
 % given, the function will plot only these.
 
-figure('Name','Full CROCKER Plot')
-tiledlayout(2,1)
-ax1 = nexttile;
-contourf(ax1,fullB1,10)
+figure('Name','Full CROCKER Plot B1')
+contourf(fullB1,10)
 title('B1 10 contour line')
 colorbar
-ax2 = nexttile;
-contourf(ax2,fullB0,10)
-hold on
+figure('Name','Full CROCKER Plot B0')
+contourf(fullB0,10)
 title('B0 10 contour line')
 colorbar
 
